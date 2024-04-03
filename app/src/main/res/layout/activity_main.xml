@@ -19,7 +19,8 @@
             android:id="@+id/etAnswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Please enter your guess:" />
+            android:hint="Please enter your guess:"
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -36,7 +37,6 @@
         android:id="@+id/tvTipCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/btnGuess"
         app:layout_constraintTop_toBottomOf="@+id/btnGuess" />
 

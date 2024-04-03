@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.ggantycc.cguessgametest.databinding.ActivityMainBinding
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -22,6 +23,31 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val numberToGuess = Random.nextInt(1, 10)
+        var numberOfGuesses = 0
+
+        binding.btnGuess.setOnClickListener {
+            numberOfGuesses++
+            binding.tvTipCounter.setText("Number of tips: " + numberOfGuesses)
+            val answeredNumber = binding.etAnswer.text
+            if (answeredNumber.isNotEmpty()) {
+                val rawValue = answeredNumber.toString().toInt()
+                if (rawValue > 10 || rawValue < 1) {
+                    binding.tvResult.setText("You can only guess a number between 1 and 10")
+                } else {
+                    if (rawValue > numberToGuess) {
+                        binding.tvResult.setText("You guessed a higher number")
+                    } else if (rawValue < numberToGuess) {
+                        binding.tvResult.setText("You guessed a lower number")
+                    } else {
+                        binding.tvResult.setText("You guessed the number, you won!")
+                        binding.btnGuess.isClickable = false
+                    }
+                }
+            } else {
+                binding.tvResult.setText("You did not guess any number")
+            }
+        }
 
     }
 }
