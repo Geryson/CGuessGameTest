@@ -1,6 +1,7 @@
 package com.ggantycc.cguessgametest
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,9 +11,20 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    var numberToGuess = 0
+
+    var numberOfGuesses = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        numberToGuess = if (savedInstanceState != null && savedInstanceState.containsKey("KEY_RANDOM"))
+        {
+            savedInstanceState.getInt("KEY_RANDOM")
+        } else {
+            generateNewNumber()
+        }
+        Log.d("NumberToGuess", numberToGuess.toString())
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,8 +35,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val numberToGuess = Random.nextInt(1, 10)
-        var numberOfGuesses = 0
+        binding.btnReset.setOnClickListener {
+            resetGame()
+        }
 
         binding.btnGuess.setOnClickListener {
             numberOfGuesses++
@@ -48,6 +61,23 @@ class MainActivity : AppCompatActivity() {
                 binding.tvResult.setText("You did not guess any number")
             }
         }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("KEY_RANDOM", numberToGuess)
+    }
+
+    fun generateNewNumber(): Int {
+        return Random.nextInt(1, 10)
+    }
+
+    fun resetGame() {
+        numberToGuess = generateNewNumber()
+        numberOfGuesses = 0
+        binding.etAnswer.setText("")
+        binding.tvTipCounter.text = ""
+        binding.tvResult.text = ""
+        binding.btnGuess.isClickable = true
     }
 }
